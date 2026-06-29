@@ -13,7 +13,7 @@ jobs:
     steps:
       # NOTE: actions are tag-referenced for readability; Dependabot (.github/dependabot.yml)
       # keeps them current and Fortune-100 deployments should pin these to full commit SHAs.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - name: Install
@@ -28,7 +28,7 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - name: Install scanners
