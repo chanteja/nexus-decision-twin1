@@ -1,0 +1,10 @@
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pydantic>=2.6
+httpx>=0.26,<0.28
+mangum>=0.17
+segno>=1.6            # pure-python QR (phone verification); zero native deps
+# live AWS path (optional; demo runs without these):
+#   boto3>=1.34
+#   (immutable ledger: app-level Merkle chain + S3 Object Lock (WORM) + OpenTimestamps;
+#    QLDB was retired by AWS on 2025-07-31, so it is no longer the durable store — see ARCHITECTURE.md)

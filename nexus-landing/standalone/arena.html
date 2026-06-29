@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>NEXUS — Reality Arena · Humans vs AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--void:#04050A;--soil:#0A0B12;--data:#4DE0E8;--possible:#8B6CFF;--life:#46C98A;--survivor:#F4C770;--dissent:#FF5C7A;--mist:#AEB8D0;--dim:#566080;--line:#1b2336}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:radial-gradient(120% 90% at 50% -10%,#0b1020,#04050A 60%);color:var(--mist);font-family:"Space Grotesk",system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+  .wrap{max-width:880px;margin:0 auto;padding:max(20px,env(safe-area-inset-top)) 20px 80px}
+  .brand{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.34em;color:var(--dim);text-transform:uppercase;padding:14px 0 16px;display:flex;justify-content:space-between}
+  .brand .live{color:var(--life)} .brand .demo{color:var(--survivor)}
+  h1{font-family:"Fraunces",Georgia,serif;font-weight:300;font-size:clamp(30px,6vw,52px);color:#EEF1F8;line-height:1.08;letter-spacing:-.015em}
+  h1 em{font-style:normal;color:var(--survivor)}
+  .sub{margin-top:12px;color:var(--dim);font-size:13.5px;line-height:1.6;max-width:62ch}
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:22px 0 10px}
+  button{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.04em;color:#04050A;background:var(--survivor);border:none;border-radius:10px;padding:11px 16px;cursor:pointer;transition:transform .1s,filter .2s}
+  button:hover{filter:brightness(1.08)} button:active{transform:translateY(1px)}
+  button.ghost{background:transparent;color:var(--mist);border:1px solid var(--line)}
+  button:disabled{opacity:.5;cursor:default}
+  .count{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--dim)}
+  .count b{color:var(--data)}
+  table{width:100%;border-collapse:collapse;margin-top:14px}
+  thead th{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-align:right;padding:0 10px 10px;font-weight:500}
+  thead th.l{text-align:left}
+  tbody td{padding:14px 10px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+  tbody td.l{text-align:left}
+  .who{display:flex;align-items:center;gap:11px}
+  .rk{font-family:"IBM Plex Mono",monospace;color:var(--dim);width:22px;font-size:13px}
+  .nm{font-family:"Fraunces",Georgia,serif;font-size:19px;color:#EEF1F8}
+  .badge{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid currentColor}
+  .ai{color:var(--possible)} .human{color:var(--data)} .ensemble{color:var(--survivor)}
+  .score{font-family:"Space Grotesk";font-weight:700;font-size:24px;color:#EEF1F8;transition:color .5s}
+  .score.up{color:var(--life)} .score.down{color:var(--dissent)}
+  .delta{font-family:"IBM Plex Mono",monospace;font-size:11px;margin-left:6px}
+  .delta.up{color:var(--life)} .delta.down{color:var(--dissent)}
+  .muted{color:var(--dim);font-size:12px}
+  .prov td{opacity:.6}
+  .verify{margin-top:34px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,#0a0c15,#070810);padding:20px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+  .verify .qrbox{background:#fff;border-radius:12px;padding:10px;width:148px;height:148px;display:flex;align-items:center;justify-content:center}
+  .verify .qrbox img,.verify .qrbox svg{width:100%;height:100%}
+  .verify .vt{flex:1;min-width:220px}
+  .verify h3{font-family:"Fraunces",serif;font-weight:400;font-size:20px;color:#EEF1F8;margin-bottom:8px}
+  .verify p{font-size:12.5px;color:var(--dim);line-height:1.6}
+  .verify a{color:var(--data);text-decoration:none;font-family:"IBM Plex Mono",monospace;font-size:11px;word-break:break-all}
+  .note{margin-top:22px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:#36405c;line-height:1.7}
+  .flash{animation:fl .9s ease}@keyframes fl{0%{background:rgba(244,199,112,.14)}100%{background:transparent}}
+  .nav-header{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:14px 0;margin-bottom:24px}
+  .nav-header .brand-title{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.34em;color:var(--data);text-transform:uppercase;text-decoration:none}
+  .nav-header .brand-title b{color:#EEF1F8}
+  .menu-card{display:flex;background:#0d1322;border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  .menu-card a{font-family:"IBM Plex Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em;
+    color:var(--dim);padding:8px 14px;border-radius:8px;transition:.2s;text-decoration:none;display:flex;align-items:center;gap:6px}
+  .menu-card a:hover{color:var(--mist);background:#141d30}
+  .menu-card a.active{color:var(--data);background:rgba(77,224,232,.15);border:1px solid rgba(77,224,232,.3);font-weight:600}
+  .header-search{position:relative;display:flex;align-items:center}
+  .header-search input{background:#070810;border:1px solid var(--line);border-radius:20px;color:#EEF1F8;font-family:"IBM Plex Mono",monospace;font-size:11px;padding:6px 12px 6px 28px;outline:none;width:180px;transition:.2s}
+  .header-search input:focus{border-color:var(--data);width:240px;box-shadow:0 0 10px rgba(77,224,232,.15)}
+  .header-search::before{content:"🔍";position:absolute;left:9px;font-size:10px;opacity:.6;pointer-events:none}
+  input.api-input{background:#070810;border:1px solid var(--line);border-radius:8px;color:#EEF1F8;font-family:"IBM Plex Mono",monospace;font-size:12px;padding:9px 11px;outline:none;width:230px}
+  input.api-input:focus{border-color:var(--survivor)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav-header">
+    <a href="index.html" class="brand-title"><b>NEXUS</b> · REALITY ARENA</a>
+    <nav class="menu-card" aria-label="Main Menu Card">
+      <a href="index.html"><span>🏠</span> Home</a>
+      <a href="decision-graph.html"><span>🕸️</span> Graph</a>
+      <a href="arena.html" class="active"><span>⚔️</span> Arena</a>
+      <a href="verify.html"><span>🛡️</span> Verify</a>
+    </nav>
+    <div class="header-search">
+      <input type="text" placeholder="Ask the twin..." id="navSearch" aria-label="Search or ask the decision twin" />
+    </div>
+    <div class="brand"><span id="livestate" class="demo">● DEMO COHORT</span></div>
+  </div>
+  <h1>Who predicts reality best — <em>humans or AI?</em></h1>
+  <div class="sub">Every forecaster below sealed its calls <b>before</b> the outcomes existed. Reality is the judge. The <b>Reality Score</b> rises only on sealed forward calls an external oracle later confirmed — harder questions and earlier-correct seals count more.</div>
+
+  <div class="bar">
+    <button id="resolve">▶ Resolve reality now</button>
+    <button id="live" class="ghost">⚡ Release the live question</button>
+    <button id="anchor" class="ghost">⚓ Anchor the record</button>
+    <span class="count" id="count">loading…</span>
+  </div>
+
+  <table>
+    <thead><tr>
+      <th class="l">Forecaster</th><th>Reality Score</th><th>Accuracy</th><th>Resolved</th><th>Pending</th><th>First-right</th>
+    </tr></thead>
+    <tbody id="board"><tr><td class="l muted" colspan="6">Reading the arena…</td></tr></tbody>
+  </table>
+
+  <div class="verify">
+    <div class="qrbox" id="qrbox"><span class="muted" style="color:#888">QR</span></div>
+    <div class="vt">
+      <h3>Don't trust me — verify a seal on your phone.</h3>
+      <p>Scan to open one Foresight Certificate and let your own device recompute its hash and confirm the seal predates the outcome. No NEXUS account, no trust required.</p>
+      <a id="verifylink" href="#" target="_blank">verify link</a>
+    </div>
+  </div>
+
+  <div class="note" id="honesty"></div>
+  <div class="bar" style="margin-top:18px">
+    <span class="count">API</span>
+    <input id="apiin" placeholder="http://localhost:8000"/>
+    <button class="ghost" id="setapi">connect</button>
+  </div>
+</div>
+<script>
+const qs = new URLSearchParams(location.search);
+let API = (qs.get('api') || localStorage.getItem('nexus_api') || window.location.origin).replace(/\/$/, '');
+const $ = id => document.getElementById(id);
+const prev = {};            // forecaster -> last score (for delta animation)
+let firstArenaId = null;
+
+const badge = k => `<span class="badge ${k}">${k==='ai'?'AI':k==='ensemble'?'CROWD':'HUMAN'}</span>`;
+const fmt = t => t ? new Date(t*1000).toISOString().replace('T',' ').replace(/\..+/,' UTC') : '—';
+
+async function poll(){
+  try{
+    const a = await (await fetch(`${API}/v1/arena`, {cache:'no-store'})).json();
+    render(a);
+    $('livestate').className='live'; $('livestate').textContent='● LIVE · '+(a.cohort==='demo'?'demo cohort':'live');
+  }catch(e){ $('count').textContent = 'API unreachable at '+API; }
+}
+
+function render(a){
+  const rows = a.leaderboard || [];
+  const board = $('board'); board.innerHTML='';
+  rows.forEach((r,i)=>{
+    const tr = document.createElement('tr');
+    if(!r.scored) tr.className='prov';
+    const p = prev[r.forecaster];
+    let delta='';
+    if(p!=null && r.scored && r.reality_score!==p){
+      const d = r.reality_score - p, up = d>0;
+      delta = `<span class="delta ${up?'up':'down'}">${up?'▲':'▼'}${Math.abs(d)}</span>`;
+      tr.classList.add('flash');
+    }
+    prev[r.forecaster] = r.scored ? r.reality_score : null;
+    const scoreCls = (p!=null && r.scored)?(r.reality_score>p?'up':(r.reality_score<p?'down':'')):'';
+    tr.innerHTML = `
+      <td class="l"><div class="who"><span class="rk">${r.scored?('#'+r.rank):'—'}</span>
+        <span class="nm">${r.forecaster}</span> ${badge(r.kind)}</div></td>
+      <td><span class="score ${scoreCls}">${r.scored?r.reality_score:'<span class="muted">unscored</span>'}</span>${delta}</td>
+      <td>${(r.resolved > 0 && r.accuracy != null) ? Math.round(r.accuracy*100)+'%' : '—'}</td>
+      <td>${r.resolved}</td>
+      <td class="muted">${r.pending}</td>
+      <td>${r.first_right||0}</td>`;
+    board.appendChild(tr);
+  });
+  const cd = a.next_resolution_at ? Math.max(0, Math.round(a.next_resolution_at - (a.now||Date.now()/1000))) : null;
+  $('count').innerHTML = `<b>${a.arena_resolved||0}</b> resolved · <b>${a.arena_pending||0}</b> sealed &amp; pending`
+    + (cd!=null && a.arena_pending? ` · next reality in <b>${cd}s</b>`:'');
+  $('honesty').textContent = a.honesty || '';
+}
+
+async function setupQR(){
+  if(!API) return;
+  try{
+    const led = await (await fetch(`${API}/v1/ledger?limit=200`,{cache:'no-store'})).json();
+    const arena = (led.entries||[]).find(e => (e.id && (e.author==='claude'||e.author==='human-expert'))) || (led.entries||[])[0];
+    if(!arena) return;
+    firstArenaId = arena.id;
+    const link = `${location.origin}${location.pathname.replace(/arena\.html$/,'verify.html')}?id=${arena.id}&api=${encodeURIComponent(API)}`;
+    $('verifylink').textContent = link; $('verifylink').href = link;
+    // server-rendered SVG QR (segno); base is the API so a phone can reach it
+    const qr = `${API}/v1/verify/${arena.id}/qr?base=${encodeURIComponent(API)}`;
+    const img = new Image(); img.onload=()=>{$('qrbox').innerHTML='';$('qrbox').appendChild(img);};
+    img.onerror=()=>{ $('qrbox').innerHTML = `<a href="${link}" target="_blank" class="muted" style="color:#04050A;font-size:10px">open verify</a>`; };
+    img.src = qr;
+  }catch(e){}
+}
+
+$('resolve').onclick = async () => {
+  if(!API) return;
+  $('resolve').disabled=true; $('resolve').textContent='resolving…';
+  try{ const r = await (await fetch(`${API}/v1/prove`,{method:'POST'})).json();
+       $('resolve').textContent = `▶ Resolved ${ (r.settled||[]).length } · again`; }
+  catch(e){ $('resolve').textContent='▶ Resolve reality now'; }
+  $('resolve').disabled=false; poll();
+};
+$('live').onclick = async () => {
+  if(!API) return; $('live').disabled=true; $('live').textContent='reality arriving…';
+  try{ const r = await (await fetch(`${API}/v1/demo/resolve_live`,{method:'POST'})).json();
+       $('live').textContent = (r.settled||[]).length ? `⚡ Reality landed (${(r.settled||[]).length})` : '⚡ already released'; }
+  catch(e){ $('live').textContent='⚡ Release the live question'; }
+  $('live').disabled=false; poll();
+};
+$('anchor').onclick = async () => {
+  if(!API) return; $('anchor').disabled=true;
+  try{ await fetch(`${API}/v1/anchor`,{method:'POST'}); $('anchor').textContent='⚓ Anchored'; }catch(e){}
+  $('anchor').disabled=false; setupQR();
+};
+function renderApi(){ $('apiin').value = API; }
+$('setapi').onclick = () => { API = $('apiin').value.trim().replace(/\/$/,''); localStorage.setItem('nexus_api',API); poll(); setupQR(); };
+$('apiin').addEventListener('keydown',e=>{if(e.key==='Enter')$('setapi').click();});
+
+renderApi(); poll(); setupQR(); setInterval(poll, 2000);
+
+// Preserve ?api= and setup nav search
+const navQ = '?api=' + encodeURIComponent((API||'http://localhost:8000').replace(/\/$/,''));
+document.querySelectorAll('.nav-links a').forEach(a => {
+  const href = a.getAttribute('href');
+  if(href) a.setAttribute('href', href.split('?')[0] + navQ);
+});
+const ns = $('navSearch');
+if(ns){
+  ns.addEventListener('keydown', e => {
+    if(e.key==='Enter' && ns.value.trim()){
+      location.href = 'index.html' + navQ + '&search=' + encodeURIComponent(ns.value.trim());
+    }
+  });
+}
+</script>
+</body>
+</html>

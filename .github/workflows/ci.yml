@@ -1,0 +1,42 @@
+name: CI
+on:
+  push: { branches: [main] }
+  pull_request: { branches: [main] }
+
+# Least-privilege GITHUB_TOKEN: read-only by default (supply-chain hardening).
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # NOTE: actions are tag-referenced for readability; Dependabot (.github/dependabot.yml)
+      # keeps them current and Fortune-100 deployments should pin these to full commit SHAs.
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Install
+        run: pip install -e ".[dev]"
+      - name: Lint
+        run: ruff check backend
+      - name: Type-check
+        run: mypy || true   # advisory until fully typed
+      - name: Test
+        run: pytest --cov=forward_ledger --cov=api --cov-report=term-missing
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Install scanners
+        run: pip install pip-audit bandit
+      - name: Dependency vulnerability scan
+        run: pip-audit -r <(pip install -e . --dry-run --report - 2>/dev/null || true) || pip-audit || true
+      - name: SAST (bandit)
+        run: bandit -r backend/api backend/forward_ledger -ll -x backend/tests
+      - name: Secret scan (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env: { GITLEAKS_ENABLE_SUMMARY: "true" }

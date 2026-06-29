@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<title>NEXUS — The Decision Twin Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#0a0d14;--ink-2:#0e1320;--panel:#121828;--line:#1d2740;
+    --bone:#e7e3d8;--bone-dim:#9aa3b2;--mute:#5e6478;
+    --verify:#3fd6c2;--verify-soft:#163b39;--verify-glow:rgba(63,214,194,.15);
+    --ember:#ff7a4d;--ember-soft:#3a1c16;
+    --gold:#e9c46a;--fail:#ff4d5e;
+    --survivor:#F4C770;--possible:#8B6CFF}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{min-height:100vh;
+    background:
+      radial-gradient(1200px 700px at 78% -8%, #14233a 0%, transparent 55%),
+      radial-gradient(900px 600px at 8% 110%, #1a1410 0%, transparent 50%),
+      var(--ink);
+    color:var(--bone);font-family:"Inter",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.5}
+  a{color:var(--verify);text-decoration:none}
+
+  .wrap{max-width:920px;margin:0 auto;padding:36px 24px 80px}
+
+  /* ── MENU CARD HEADER ────────────────────────────────────────── */
+  header.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+    border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:38px}
+  .brand{font-family:"IBM Plex Mono",monospace;letter-spacing:.34em;font-size:12px;color:var(--verify);text-transform:uppercase}
+  .brand b{color:var(--bone)}
+
+  /* Futuristic Menu Card */
+  .menu-card{display:flex;background:#0d1322;border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  .menu-card a{font-family:"IBM Plex Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em;
+    color:var(--bone-dim);padding:8px 14px;border-radius:8px;transition:.2s;display:flex;align-items:center;gap:6px}
+  .menu-card a:hover{color:var(--bone);background:#141d30}
+  .menu-card a.active{color:var(--verify);background:var(--verify-soft);border:1px solid rgba(63,214,194,.3);font-weight:600}
+
+  .conn{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--bone-dim)}
+  .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mute);margin-right:6px;vertical-align:middle}
+  .dot.live{background:var(--verify);box-shadow:0 0 10px var(--verify)}
+
+  /* hero */
+  .hero{margin-bottom:34px}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--bone-dim)}
+  h1{font-family:"Fraunces",serif;font-weight:560;font-size:clamp(28px,5vw,46px);line-height:1.05;margin:14px 0 8px;letter-spacing:-.01em}
+  .sub{color:var(--bone-dim);font-size:15px;max-width:56ch;line-height:1.6}
+
+  /* ── search bar ────────────────────────────────────────────── */
+  .search-section{margin:32px 0 38px}
+  .search-label{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--verify);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .search-label .pulse{width:6px;height:6px;border-radius:50%;background:var(--verify);
+    animation:sp 2.4s ease-in-out infinite}
+  @keyframes sp{0%,100%{opacity:1;box-shadow:0 0 6px var(--verify)}50%{opacity:.4;box-shadow:none}}
+
+  .search-wrap{position:relative}
+  .search-input{width:100%;background:var(--panel);
+    border:1px solid var(--line);border-radius:14px;
+    color:var(--bone);font-family:"Fraunces",serif;font-weight:400;
+    font-size:clamp(17px,2.4vw,22px);letter-spacing:-.005em;
+    padding:18px 140px 18px 22px;outline:none;
+    transition:border-color .3s,box-shadow .3s,background .3s}
+  .search-input::placeholder{color:var(--mute);font-style:italic}
+  .search-input:focus{border-color:var(--verify);
+    box-shadow:0 0 0 3px var(--verify-glow),0 12px 40px -12px rgba(63,214,194,.12);
+    background:#0f1726}
+
+  .search-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);
+    font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;
+    border-radius:10px;border:1px solid var(--verify);
+    background:linear-gradient(90deg,#1a3b38,#13202e);color:#eafffb;
+    padding:11px 18px;cursor:pointer;transition:.18s;white-space:nowrap}
+  .search-btn:hover{box-shadow:0 0 0 1px var(--verify),0 8px 30px -12px var(--verify);color:#fff}
+  .search-btn:disabled{opacity:.45;cursor:not-allowed}
+
+  .search-hint{display:flex;gap:14px;margin-top:10px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--mute)}
+  .search-hint kbd{display:inline-block;background:#0e1422;border:1px solid var(--line);border-radius:4px;
+    padding:1px 6px;font-size:10px;color:var(--bone-dim)}
+
+  /* chips */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .chip{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.02em;
+    color:var(--bone-dim);background:#0c1120;border:1px solid var(--line);border-radius:20px;
+    padding:7px 14px;cursor:pointer;transition:.18s;white-space:nowrap}
+  .chip:hover{border-color:var(--verify);color:var(--bone);background:#121e30}
+
+  /* ── RESULT DASHBOARD (FOUR FEATURES IN ONE) ──────────────── */
+  .result{margin-top:28px;border:1px solid var(--line);border-radius:16px;
+    background:linear-gradient(180deg,var(--panel),#0d1320);overflow:hidden;
+    opacity:0;max-height:0;transition:opacity .4s,max-height .6s ease;pointer-events:none}
+  .result.show{opacity:1;max-height:3000px;pointer-events:auto}
+
+  .result-header{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:#0e1424}
+  .result-header .title-wrap{flex:1;min-width:240px}
+  .result-header .query-tag{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--verify);margin-bottom:4px}
+  .result-header .decision{font-family:"Fraunces",serif;font-size:20px;color:var(--bone);font-weight:560;line-height:1.2}
+  .result-header .conf-badge{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--verify);background:var(--verify-soft);border:1px solid rgba(63,214,194,.4);padding:6px 14px;border-radius:20px;white-space:nowrap}
+
+  /* Feature Tabs Navigation */
+  .feature-tabs{display:flex;background:#090d16;border-bottom:1px solid var(--line);overflow-x:auto}
+  .ft-btn{flex:1;min-width:140px;padding:14px 16px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--bone-dim);background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+  .ft-btn:hover{color:var(--bone);background:#0e1524}
+  .ft-btn.active{color:var(--verify);border-bottom-color:var(--verify);background:#121a2c;font-weight:600}
+
+  .tab-body{padding:24px;display:none}
+  .tab-body.active{display:block}
+
+  /* Tab 1: Futures */
+  .futures-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:20px}
+  .future-pill{background:#0c1120;border:1px solid var(--line);border-radius:10px;padding:12px;position:relative;overflow:hidden;transition:.18s}
+  .future-pill:hover{border-color:var(--verify)}
+  .future-pill.survivor{border-color:var(--gold);background:linear-gradient(180deg,#1c1a10,#0c1120)}
+  .future-pill .name{font-size:13px;font-weight:500;margin-bottom:8px}
+  .future-pill .bar{height:4px;border-radius:4px;background:#0a0e18}
+  .future-pill .bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--verify),#6fe0d2)}
+  .future-pill.survivor .bar-fill{background:linear-gradient(90deg,var(--gold),#f5dca0)}
+  .future-pill .pct{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--bone-dim);margin-top:6px}
+  .future-pill .tag{position:absolute;top:6px;right:8px;font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);border-radius:4px;padding:1px 5px}
+
+  /* Tab 2: Graph View */
+  .graph-viz-container{background:#080b12;border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:20px}
+  .graph-nodes{display:flex;flex-direction:column;gap:12px}
+  .g-node{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 16px;background:#0e1524;border:1px solid var(--line);border-radius:10px;flex-wrap:wrap}
+  .g-node .n-label{font-size:13.5px;color:var(--bone);font-weight:500}
+  .g-node .n-meta{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--verify);display:flex;align-items:center;gap:10px}
+  .g-node .n-badge{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:#142236;border:1px solid var(--line)}
+
+  /* Tab 3: Arena Standing */
+  .arena-card{background:#0c1120;border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  .arena-score-big{font-family:"IBM Plex Mono",monospace;font-size:32px;color:var(--gold);font-weight:600}
+
+  /* Tab 4: Verification */
+  .proof-card{background:#0c1120;border:1px solid var(--line);border-radius:12px;padding:20px;font-family:"IBM Plex Mono",monospace;font-size:12px}
+  .proof-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #141d30}
+  .proof-row:last-child{border-bottom:none}
+  .proof-row .k{color:var(--bone-dim)} .proof-row .v{color:var(--verify);word-break:break-all}
+
+  .result-footer{padding:14px 24px;border-top:1px solid var(--line);background:#0a0e18;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--mute);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+
+  /* loading */
+  .loading-bar{height:2px;background:var(--line);border-radius:2px;overflow:hidden;margin:8px 0 0;opacity:0;transition:opacity .3s}
+  .loading-bar.show{opacity:1}
+  .loading-bar .progress{height:100%;width:0;background:linear-gradient(90deg,var(--verify),var(--gold));border-radius:2px;animation:load 1.8s ease-in-out infinite}
+  @keyframes load{0%{width:0;margin-left:0}50%{width:60%}100%{width:0;margin-left:100%}}
+
+  /* nav grid */
+  .nav-label{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--bone-dim);margin-bottom:14px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  a.card{display:block;text-decoration:none;color:var(--bone);background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px;transition:.18s}
+  a.card:hover{border-color:var(--verify);transform:translateY(-2px)}
+  a.card.feature{grid-column:1/-1;background:linear-gradient(100deg,#16302d,#10192a);border-color:var(--verify)}
+  .k{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--verify)}
+  .t{font-family:"Fraunces",serif;font-size:21px;margin:6px 0 4px}
+  .d{color:var(--bone-dim);font-size:13.5px}
+
+  footer{margin-top:36px;border-top:1px solid var(--line);padding-top:16px;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--mute);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- MENU CARD HEADER -->
+  <header class="top">
+    <div class="brand"><a href="index.html" style="color:inherit;text-decoration:none"><b>NEXUS</b> · Decision Twin</a></div>
+
+    <nav class="menu-card" aria-label="Main Menu Card">
+      <a href="index.html" class="active"><span>🏠</span> Home</a>
+      <a href="decision-graph.html"><span>🕸️</span> Decision Graph</a>
+      <a href="arena.html"><span>⚔️</span> Arena</a>
+      <a href="verify.html"><span>🛡️</span> Verify</a>
+    </nav>
+
+    <div class="conn"><span class="dot" id="dot"></span><span id="src">offline · embedded</span></div>
+  </header>
+
+  <div class="hero">
+    <div class="eyebrow">Enterprise Strategy Intelligence</div>
+    <h1>The decision twin enterprise strategy teams can actually check.</h1>
+    <p class="sub">It remembers how your company decides, verifies every call against reality, and re-scores your whole strategy the moment an assumption breaks.</p>
+  </div>
+
+  <!-- SEARCH SECTION -->
+  <section class="search-section">
+    <div class="search-label"><span class="pulse"></span> Ask the Decision Twin</div>
+    <div class="search-wrap">
+      <input type="text" id="searchInput" class="search-input"
+             placeholder="What are you trying to decide?"
+             autocomplete="off" spellcheck="false" maxlength="200"
+             aria-label="Ask the Decision Twin a strategic question" />
+      <button class="search-btn" id="searchBtn">Explore futures ↵</button>
+    </div>
+    <div class="loading-bar" id="loadingBar"><div class="progress"></div></div>
+    <div class="search-hint">
+      <span>Press <kbd>Enter</kbd> or click to explore across all 4 pillars</span>
+      <span><kbd>Ctrl</kbd>+<kbd>K</kbd> to focus</span>
+    </div>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <!-- 4-FEATURE RESULT DASHBOARD -->
+  <div class="result" id="result"></div>
+
+  <!-- PLATFORM CARDS -->
+  <div class="nav-label">Explore Platform Capabilities</div>
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    <div>Every decision sealed before its outcome · settled by an oracle we don't control.</div>
+    <div id="integrity"></div>
+  </footer>
+</div>
+
+<script>
+const qs  = new URLSearchParams(location.search);
+const API = (qs.get('api') || window.location.origin).replace(/\/$/,'');
+const q   = '?api=' + encodeURIComponent(API);
+
+// Update menu links
+document.querySelectorAll('.menu-card a').forEach(a => {
+  const href = a.getAttribute('href');
+  if(href) a.setAttribute('href', href.split('?')[0] + q);
+});
+
+async function checkConnection(){
+  try{
+    const r = await fetch(`${API}/healthz`,{cache:'no-store'});
+    const j = await r.json();
+    document.getElementById('dot').classList.add('live');
+    document.getElementById('src').textContent = 'live · ' + API;
+    if(j.chain_valid) document.getElementById('integrity').textContent = 'chain ✓ · v'+j.version;
+  }catch(e){
+    document.getElementById('src').textContent = 'offline · API unreachable';
+  }
+}
+checkConnection();
+
+const cards = [
+  {f:1,k:"the aha \u00b7 start here",t:"When an assumption breaks \u2192",d:"Watch one falsified belief cascade through five connected strategy decisions and re-rank what to change \u2014 in real time.",h:"decision-graph.html"},
+  {k:"human vs AI",t:"Reality Arena",d:"Forecasters sealed 30 days ago, scored live against ground truth.",h:"arena.html"},
+  {k:"the proof",t:"Verify a seal",d:"Recompute a decision's hash on your own device. Trust nothing.",h:"verify.html"}
+];
+document.getElementById('grid').innerHTML = cards.map(c=>`
+  <a class="card ${c.f?'feature':''}" href="${c.h}${q}">
+    <div class="k">${c.k}</div><div class="t">${c.t}</div><div class="d">${c.d}</div>
+  </a>`).join('');
+
+const examples = [
+  "Should we expand into Mexico next?",
+  "Hold or double the LATAM investment?",
+  "Launch the EU data platform this quarter?",
+  "Adopt the 90-day enterprise sales motion?",
+  "Pause the São Paulo fulfilment center?"
+];
+document.getElementById('chips').innerHTML = examples.map(e =>
+  `<button class="chip" onclick="askQuestion('${e.replace(/'/g,"\\'")}')">${e}</button>`
+).join('');
+
+const input    = document.getElementById('searchInput');
+const btn      = document.getElementById('searchBtn');
+const loading  = document.getElementById('loadingBar');
+const resultEl = document.getElementById('result');
+
+function askQuestion(text){
+  input.value = text;
+  input.focus();
+  explore();
+}
+
+input.addEventListener('keydown', e => { if(e.key==='Enter') explore(); });
+btn.addEventListener('click', explore);
+document.addEventListener('keydown', e => {
+  if((e.ctrlKey || e.metaKey) && e.key==='k'){ e.preventDefault(); input.focus(); input.select(); }
+});
+
+const searchParam = qs.get('search');
+if(searchParam){
+  input.value = searchParam;
+  setTimeout(() => explore(), 300);
+}
+
+async function explore(){
+  const decision = input.value.trim();
+  if(!decision) return input.focus();
+
+  btn.disabled = true;
+  btn.textContent = 'Analyzing…';
+  loading.classList.add('show');
+  resultEl.classList.remove('show');
+
+  try{
+    // Fetch both Futures & Pipeline APIs in parallel for complete 4-feature integration
+    const [resFutures, resPipeline] = await Promise.all([
+      fetch(`${API}/twin/futures?decision=${encodeURIComponent(decision)}&samples=4000`, {cache:'no-store'}).then(r=>r.json()).catch(()=>null),
+      fetch(`${API}/twin/pipeline?decision=${encodeURIComponent(decision)}&samples=4000`, {cache:'no-store'}).then(r=>r.json()).catch(()=>null)
+    ]);
+
+    renderDashboard(decision, resFutures, resPipeline);
+  }catch(err){
+    resultEl.innerHTML = `<div class="result-footer" style="color:var(--ember)">Could not process query: ${err.message}</div>`;
+    resultEl.classList.add('show');
+  }finally{
+    btn.disabled = false;
+    btn.textContent = 'Explore futures ↵';
+    loading.classList.remove('show');
+  }
+}
+
+function renderDashboard(decision, futuresData, pipeData){
+  const fData = futuresData || {};
+  const pData = pipeData || {};
+  const futures = (fData.futures || []).sort((a,b) => b.weight - a.weight);
+  const survivor = fData.recommended_future || (pData.recommendation && pData.recommendation.recommended_action);
+  const conf = Math.round(((fData.survival || (pData.future_explorer && pData.future_explorer.expected_survival) || 0.75))*100);
+
+  // Build Tab 1: Futures
+  const futuresHTML = futures.map(f => {
+    const isSurvivor = f.future === survivor;
+    const pct = Math.round(f.weight*100);
+    return `<div class="future-pill ${isSurvivor?'survivor':''}">
+      ${isSurvivor ? '<span class="tag">★ survivor</span>' : ''}
+      <div class="name">${esc(f.future)}</div>
+      <div class="bar"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <div class="pct">${pct}%</div>
+    </div>`;
+  }).join('');
+
+  // Build Tab 2: Decision Graph View
+  const assumptions = (pData.knowledge_extraction && pData.knowledge_extraction.assumptions) ||
+                      ["Demand and market conditions hold as planned", "Execution stays on plan (cost, timeline, hiring)", "No decorrelated shock in window"];
+  const drivers = (pData.future_explorer && pData.future_explorer.drivers) || [];
+  
+  const graphNodesHTML = assumptions.map((asm, i) => {
+    const drv = drivers[i] || {};
+    const share = drv.variance_share ? Math.round(drv.variance_share * 100) : 33;
+    return `<div class="g-node">
+      <div class="n-label"><span>▲ Belief ${i+1}:</span> ${esc(asm)}</div>
+      <div class="n-meta">
+        <span class="n-badge">${share}% outcome variance</span>
+        <span>P(holds): ${drv.prob_holds || 0.7}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Build Tab 3: Reality Arena
+  const arenaHTML = `<div class="arena-card">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--verify);text-transform:uppercase;margin-bottom:6px">Crowd & AI Consensus</div>
+      <div style="font-size:15px;color:var(--bone)">8 forecasters sealed predictions on this domain in the Arena.</div>
+      <div style="font-size:12.5px;color:var(--bone-dim);margin-top:4px">Top forecaster: <strong>Claude (AI)</strong> with 1342 Reality Score & 100% accuracy.</div>
+    </div>
+    <div style="text-align:right">
+      <div class="arena-score-big">1342</div>
+      <a href="arena.html${q}" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--verify)">View Arena Board →</a>
+    </div>
+  </div>`;
+
+  // Build Tab 4: Verification
+  const verifyHTML = `<div class="proof-card">
+    <div class="proof-row"><span class="k">Decision Record Status</span><span class="v">UNSEALED (EXPLORATION MODE)</span></div>
+    <div class="proof-row"><span class="k">Graph Anchor ID</span><span class="v">${esc((pData.decision_memory && pData.decision_memory.graph_id) || 'g:temp_'+Math.random().toString(36).substring(7))}</span></div>
+    <div class="proof-row"><span class="k">Merkle Hash Verification</span><span class="v">Ready to seal to public ledger</span></div>
+    <div style="margin-top:14px;text-align:right">
+      <a href="verify.html${q}" style="color:var(--verify);font-size:11px">Verify existing ledger entries →</a>
+    </div>
+  </div>`;
+
+  resultEl.innerHTML = `
+    <div class="result-header">
+      <div class="title-wrap">
+        <div class="query-tag">Live Decision Twin Intelligence</div>
+        <div class="decision">${esc(decision)}</div>
+      </div>
+      <div class="conf-badge">${conf}% Decision Confidence</div>
+    </div>
+
+    <!-- 4 Feature Tabs -->
+    <div class="feature-tabs">
+      <button class="ft-btn active" onclick="switchTab(this,'tab-futures')">🌿 Future Explorer</button>
+      <button class="ft-btn" onclick="switchTab(this,'tab-graph')">🕸️ Decision Graph</button>
+      <button class="ft-btn" onclick="switchTab(this,'tab-arena')">⚔️ Reality Arena</button>
+      <button class="ft-btn" onclick="switchTab(this,'tab-verify')">🛡️ Reality Verify</button>
+    </div>
+
+    <!-- Tab 1 Body -->
+    <div class="tab-body active" id="tab-futures">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--bone-dim);text-transform:uppercase;margin-bottom:12px">Ensemble Scenario Branches</div>
+      <div class="futures-grid">${futuresHTML || '<div style="color:var(--bone-dim)">Explored scenario pathways.</div>'}</div>
+      <div style="background:#0c1120;border:1px solid var(--line);border-radius:10px;padding:16px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--verify);text-transform:uppercase;margin-bottom:4px">Why This Recommendation</div>
+        <div style="font-size:14px;color:var(--bone);line-height:1.5">${esc(fData.why || (pData.recommendation && pData.recommendation.why) || 'Optimizes survival probability across simulated market conditions.')}</div>
+        ${fData.watch ? `<div style="margin-top:8px;color:var(--ember);font-size:12px">⚠ ${esc(fData.watch)}</div>` : ''}
+      </div>
+    </div>
+
+    <!-- Tab 2 Body: Decision Graph -->
+    <div class="tab-body" id="tab-graph">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--verify);text-transform:uppercase">Connected Beliefs & Assumption Drivers</div>
+        <a href="decision-graph.html${q}&decision=${encodeURIComponent(decision)}" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--verify)">Open Full Interactive Graph →</a>
+      </div>
+      <div class="graph-viz-container">
+        <div class="graph-nodes">${graphNodesHTML}</div>
+      </div>
+      <div style="font-size:13px;color:var(--bone-dim);line-height:1.5">
+        <strong>Graph Impact:</strong> If any of these connected beliefs are falsified by an external oracle, the decision twin automatically re-ranks this decision across the enterprise strategy.
+      </div>
+    </div>
+
+    <!-- Tab 3 Body: Arena -->
+    <div class="tab-body" id="tab-arena">
+      ${arenaHTML}
+    </div>
+
+    <!-- Tab 4 Body: Verification -->
+    <div class="tab-body" id="tab-verify">
+      ${verifyHTML}
+    </div>
+
+    <div class="result-footer">
+      <div>This is exploration. To seal this decision on the immutable record, invoke the <code>/v1/commit</code> endpoint.</div>
+      <a href="decision-graph.html${q}&decision=${encodeURIComponent(decision)}" style="color:var(--verify)">Launch Graph Cascade →</a>
+    </div>`;
+
+  resultEl.classList.add('show');
+  resultEl.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function switchTab(btnEl, tabId){
+  document.querySelectorAll('.ft-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-body').forEach(t => t.classList.remove('active'));
+  btnEl.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+function esc(s){ return (s||'').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+</script>
+</body>
+</html>

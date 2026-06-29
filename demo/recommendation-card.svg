@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 560" font-family="Inter, system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e1320"/><stop offset="1" stop-color="#0a0d14"/></linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#241a0e"/><stop offset="1" stop-color="#121828"/></linearGradient>
+  </defs>
+  <rect width="920" height="560" fill="url(#bg2)"/>
+  <rect x="40" y="36" width="840" height="488" rx="16" fill="#121828" stroke="#1d2740"/>
+
+  <text x="68" y="78" fill="#3fd6c2" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="3">RECOMMENDED ACTION · RANK 1 OF 4</text>
+  <text x="68" y="112" fill="#e7e3d8" font-family="Fraunces, serif" font-size="25">Hold the Mexico expansion (FY+1)</text>
+  <text x="68" y="140" fill="#9aa3b2" font-size="14">Stage behind a demand gate; do not commit until Brazil re-clears the corrected threshold.</text>
+
+  <line x1="68" y1="162" x2="852" y2="162" stroke="#1d2740"/>
+
+  <!-- reason -->
+  <text x="68" y="190" fill="#5b6573" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="2">REASON</text>
+  <text x="68" y="212" fill="#cfd4dd" font-size="13.5">Leans on a belief reality just disproved: “Brazil consumer demand grows &gt;18% YoY.”</text>
+
+  <!-- confidence + financial impact row -->
+  <g transform="translate(68,236)">
+    <rect x="0" y="0" width="370" height="92" rx="10" fill="#0e1422" stroke="#1d2740"/>
+    <text x="18" y="26" fill="#5b6573" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="2">CONFIDENCE</text>
+    <text x="18" y="62" fill="#ff7a4d" font-family="Fraunces, serif" font-size="30">59% <tspan fill="#5b6573" font-size="22">→</tspan> 9%</text>
+    <text x="18" y="82" fill="#9aa3b2" font-size="11.5">−0.50 survival probability</text>
+  </g>
+  <g transform="translate(454,236)">
+    <rect x="0" y="0" width="330" height="92" rx="10" fill="url(#g2)" stroke="#e9c46a"/>
+    <text x="18" y="26" fill="#e9c46a" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="2">EXPECTED FINANCIAL IMPACT</text>
+    <text x="18" y="62" fill="#f3eee1" font-family="Fraunces, serif" font-size="30">$24.1M <tspan font-size="15" fill="#cdb98a">repriced</tspan></text>
+    <text x="18" y="82" fill="#9aa3b2" font-size="11">$48M at risk × Δconfidence · estimate</text>
+  </g>
+
+  <!-- why now -->
+  <text x="68" y="356" fill="#5b6573" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="2">WHY NOW</text>
+  <text x="68" y="378" fill="#cfd4dd" font-size="13.5">A shared upstream belief was settled false this cycle; the commitment window is still open.</text>
+
+  <!-- evidence -->
+  <text x="68" y="408" fill="#5b6573" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="2">EVIDENCE</text>
+  <text x="68" y="430" fill="#9aa3b2" font-size="12.5">• Brazil demand settled ~6% YoY vs. &gt;18% assumed (independent oracle)</text>
+  <text x="68" y="450" fill="#9aa3b2" font-size="12.5">• Triggering decision sealed 45 days before its outcome existed</text>
+
+  <!-- alternative -->
+  <rect x="68" y="466" width="784" height="40" rx="9" fill="#0e1f1d" stroke="#163b39"/>
+  <text x="84" y="484" fill="#3fd6c2" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="2">INSTEAD</text>
+  <text x="84" y="500" fill="#bfeee7" font-size="13">Redeploy the budget to the validated EU platform — same capital, decorrelated demand thesis.</text>
+</svg>
