@@ -1,7 +1,7 @@
 fastapi>=0.110
 uvicorn[standard]>=0.27
 pydantic>=2.6
-httpx>=0.26,<0.28
+httpx>=0.26,<0.29
 mangum>=0.17
 segno>=1.6            # pure-python QR (phone verification); zero native deps
 # live AWS path (optional; demo runs without these):
